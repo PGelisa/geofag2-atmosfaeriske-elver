@@ -21,7 +21,9 @@ atmosfaeriske-elver/
 
 ## Forberedelse (ca. 30 min, én gang)
 
-1. Du trenger CDS-kontoen for ERA5 og Frost-klient-IDen fra hetebølgeopplegget, og `cdsapi` installert.
+1. Du trenger to ting.
+   - **CDS-konto for ERA5.** Lag konto på Copernicus Climate Data Store (cds.climate.copernicus.eu), godta lisensen for ERA5, og legg API-nøkkelen i `~/.cdsapirc` slik det står på siden «How to API». Installer `cdsapi` med `conda install -c conda-forge cdsapi`.
+   - **Frost-klient-ID for norske stasjoner.** Gratis på frost.met.no. Velg «Request client credentials», og du får en klient-ID på e-post.
 2. Kjør skriptet fra mappen `atmosfaeriske-elver`:
    ```
    conda activate geofag2
