@@ -6,7 +6,7 @@ Elevene bruker ekte data til å se elven på kartet og regne ut hvor mye vann de
 
 ## For elever
 
-Du trenger conda-miljøet `geofag2` fra guiden [Installere og åpne Jupyter Lab](https://github.com/Realfag-AmalieSkram/Geofag2-python).
+Du trenger conda-miljøet `geofag2` fra guiden [Installere og åpne Jupyter Lab](https://pgelisa.github.io/geofag2-python-opendrift/).
 
 **Hent filene**
 
