@@ -25,6 +25,8 @@ Datakilder
 """
 
 import argparse
+import shutil
+import zipfile
 from pathlib import Path
 
 import pandas as pd
@@ -114,12 +116,30 @@ def hent_frost(klient_id):
 # 3 ERA5 (krever konto på https://cds.climate.copernicus.eu og ~/.cdsapirc)
 # ---------------------------------------------------------------------------
 def apne(fil):
-    ds = xr.open_dataset(fil).load()
+    """Åpner fila fra CDS. Blandede variabeltyper (f.eks. nedbør og terrenghøyde)
+    kommer som zip med flere NetCDF-filer, selv om vi ber om én fil."""
+    if zipfile.is_zipfile(fil):
+        mappe = fil.parent / (fil.stem + "_utpakket")
+        with zipfile.ZipFile(fil) as z:
+            z.extractall(mappe)
+        deler = [xr.open_dataset(f).load() for f in sorted(mappe.glob("*.nc"))]
+        ds = xr.merge(deler, compat="override", join="outer")
+        shutil.rmtree(mappe)
+    else:
+        ds = xr.open_dataset(fil).load()
     fil.unlink()
     navn = {"valid_time": "time", "latitude": "lat", "longitude": "lon"}
     ds = ds.rename({k: v for k, v in navn.items() if k in ds.variables})
     ds = ds.drop_vars([v for v in ["expver", "number"] if v in ds.variables])
     return ds.sortby("lat")
+
+
+def bestill(c, datasett, foresporsel, tmp):
+    """Laster bare ned hvis vi ikke allerede har en uåpnet fil fra et tidligere forsøk."""
+    if tmp.exists():
+        print(f"  bruker {tmp.name} fra forrige forsøk")
+    else:
+        c.retrieve(datasett, foresporsel, str(tmp))
 
 
 def hent_era5():
@@ -129,9 +149,20 @@ def hent_era5():
     felles = {"product_type": ["reanalysis"], "year": ["2024"],
               "data_format": "netcdf", "download_format": "unarchived"}
 
+    if (DATA / "era5_jakob_kart.nc").exists():
+        print("ERA5: era5_jakob_kart.nc finnes allerede, hopper over")
+    else:
+        hent_kart(c, felles)
+    if (DATA / "era5_jakob_nedbor.nc").exists():
+        print("ERA5: era5_jakob_nedbor.nc finnes allerede, hopper over")
+    else:
+        hent_nedbor(c, felles)
+
+
+def hent_kart(c, felles):
     print("ERA5: vanndamptransport, vanndamp, trykk og 0-gradersnivå (hver 3. time) ...")
     tmp = DATA / "_tmp_kart.nc"
-    c.retrieve("reanalysis-era5-single-levels", {
+    bestill(c, "reanalysis-era5-single-levels", {
         **felles,
         "variable": ["vertical_integral_of_eastward_water_vapour_flux",
                      "vertical_integral_of_northward_water_vapour_flux",
@@ -139,7 +170,7 @@ def hent_era5():
                      "zero_degree_level"],
         "month": ["10", "11"], "day": ["01", "29", "30", "31"],
         "time": [f"{h:02d}:00" for h in range(0, 24, 3)],
-        "area": [72, -50, 35, 25], "grid": [0.5, 0.5]}, str(tmp))
+        "area": [72, -50, 35, 25], "grid": [0.5, 0.5]}, tmp)
     ds = apne(tmp)
     ds = ds.sel(time=slice("2024-10-29", "2024-11-01T23:00"))
     navn = {"viwve": "ivt_u", "p71.162": "ivt_u", "viwvn": "ivt_v", "p72.162": "ivt_v",
@@ -149,16 +180,19 @@ def hent_era5():
     lagre(ds[["ivt_u", "ivt_v", "tcwv", "msl", "nullgrad"]], DATA / "era5_jakob_kart.nc")
     print("  era5_jakob_kart.nc")
 
+
+def hent_nedbor(c, felles):
     print("ERA5: nedbør hver time og terrenghøyde over Sør-Norge ...")
     tmp = DATA / "_tmp_nedbor.nc"
-    c.retrieve("reanalysis-era5-single-levels", {
+    bestill(c, "reanalysis-era5-single-levels", {
         **felles, "variable": ["total_precipitation", "geopotential"],
         "month": ["10", "11"], "day": ["01", "29", "30", "31"],
         "time": [f"{h:02d}:00" for h in range(24)],
-        "area": [64, 3, 57, 13]}, str(tmp))
+        "area": [64, 3, 57, 13]}, tmp)
     ds = apne(tmp).sel(time=slice("2024-10-29", "2024-11-01T23:00"))
+    z = ds.z.isel(time=0, drop=True) if "time" in ds.z.dims else ds.z
     ut = xr.Dataset({"nedbor": ds.tp * 1000,                          # m → mm per time
-                     "hoyde": (ds.z.isel(time=0, drop=True) / 9.80665).clip(min=0)})
+                     "hoyde": (z / 9.80665).clip(min=0)})
     lagre(ut, DATA / "era5_jakob_nedbor.nc")
     print("  era5_jakob_nedbor.nc")
 
