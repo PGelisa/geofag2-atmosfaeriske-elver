@@ -44,6 +44,7 @@ I cellene merket 🔧 kan du endre verdier og kjøre cellen på nytt. Dataene de
 | 2c | `IVT_KYST`, `ANDEL`, `L_KM`, `TIMER` | Tallene i regnestykket. Her kan du velge fritt |
 | 2e | `STED` | Bergen, Voss, Odda, Kinsarvik eller Førde |
 | 3a | `T0` | En temperatur (°C) |
+| 3b | `KILDE` | `"stasjon"` for Bergen – Florida fra 1983, eller `"era5"` for Bergen fra 1940 |
 | 3b | `TERSKEL` | Grensen (mm per døgn) for kraftig nedbør |
 | B | `TERSKEL_IVT` | Grensen (kg/(m·s)) for hva som regnes som elven |
 
@@ -59,7 +60,7 @@ I cellene merket 🔧 kan du endre verdier og kjøre cellen på nytt. Dataene de
 
 Snittet i 1c bruker bare breddegradene fra 50° N til 70° N. Øvstedal er nevnt i MET-rapporten, men timesdata for stasjonen kom ikke med i nedlastingen, så den er ikke med i 2d.
 
-Stasjonsserien fra Bergen – Florida starter i 1983. Gjennomsnittet for 1961–1990 i 3b bygger derfor bare på årene 1983–1990, og det glidende 30-årsmiddelet starter først i 1988. ERA5-serien for Bergen går tilbake til 1940, men notatboken bruker den bare hvis stasjonsfilen mangler.
+Stasjonsserien fra Bergen – Florida starter i 1983. Gjennomsnittet for 1961–1990 i 3b bygger derfor bare på årene 1983–1990, og det glidende 30-årsmiddelet starter først i 1988. Du kan bytte til ERA5-serien for Bergen med `KILDE = "era5"`. Den går tilbake til 1940, men jevner ut de største regnmengdene.
 
 ## For lærere
 

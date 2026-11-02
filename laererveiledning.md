@@ -15,7 +15,7 @@ atmosfaeriske-elver/
     ├── era5_jakob_kart.nc         IVT, vanndamp, trykk og 0-gradersnivå hver 3. time, 29.10–01.11.2024
     ├── era5_jakob_nedbor.nc       nedbør hver time og terrenghøyde over Sør-Norge
     ├── stasjon_<navn>_time.csv    timesnedbør fra Gullfjellet, Øvstedal og Haukedal (Frost)
-    ├── stasjon_florida_dogn.csv   døgnnedbør Bergen – Florida fra ca. 1904 (Frost)
+    ├── stasjon_florida_dogn.csv   døgnnedbør Bergen – Florida fra 1983 (Frost)
     └── punkt_bergen_nedbor.csv    døgnnedbør Bergen 1940–2026 fra ERA5 (Open-Meteo, reserve)
 ```
 
@@ -81,7 +81,18 @@ Fyll inn tallene merket ☐ når du har kjørt notatboken med ekte data.
 
 **3a** Omtrent 6–7 % per grad (6,9 % ved 10 °C). Med 2 °C varmere luft gir det rundt 14 % mer, det vil si omtrent 235 mm i stedet for 206 mm. Nedbøren kan øke mer, fordi ekstra latent varme kan forsterke oppdriften, eller mindre, hvis vinden eller banen til lavtrykkene endrer seg.
 
-**3b** ☐ tall for Bergen. Bjerknessenteret fant at nedbøren i Norge har økt med om lag 20 % siden 1900, mest på Sørvestlandet, og at frontnedbøren ventes å øke med omtrent 5 % per grad oppvarming.
+**3b** Elevene velger datakilde med `KILDE`. Frost leverte døgnnedbør for Bergen – Florida bare fra 1983, så stasjonsserien dekker ikke normalperioden 1961–1990 (notatboken skriver «bare 8 av 30 år»). ERA5 går tilbake til 1940, men glatter ut de største regnmengdene.
+
+| | Kilde | Årsnedbør | Største døgnnedbør (snitt) | Døgn ≥ 50 mm per år |
+|---|---|---|---|---|
+| 1961–1990 | Stasjon (bare 1983–1990) | 2 414 mm | 64,5 mm | 3,2 |
+| 1991–2020 | Stasjon | 2 495 mm | 75,7 mm | 3,0 |
+| 1961–1990 | ERA5 | 2 339 mm | 51,5 mm | 0,7 |
+| 1991–2020 | ERA5 | 2 395 mm | 56,4 mm | 1,2 |
+
+Med ERA5 øker årsnedbøren litt, og både den største døgnnedbøren og antallet døgn med minst 50 mm øker. Stasjonen gir mye høyere verdier for kraftig nedbør, fordi den måler i ett punkt, mens ERA5 er et gjennomsnitt over en rute på omtrent 25 × 25 km. Det er et godt poeng for oppgave 3 og 4: ERA5 egner seg best til å se endring over lang tid, stasjonen til å se hvor mye det faktisk regner på ett sted. Bjerknessenteret fant at nedbøren i Norge har økt med om lag 20 % siden 1900, mest på Sørvestlandet, og at frontnedbøren ventes å øke med omtrent 5 % per grad oppvarming.
+
+Vil du ha en lengre stasjonsserie, kan Bergen – Florida lastes ned manuelt fra seklima.met.no. MET har eldre data enn det Frost-forespørselen ga.
 
 **Refleksjon** Varselet traff godt på hvor og når, og nivået (120–180 mm) var riktig for de fleste stasjonene. Lokale topper (206 mm) er vanskelige å treffe fordi små forskjeller i vindretning avgjør hvilke fjellsider som får mest.
 
