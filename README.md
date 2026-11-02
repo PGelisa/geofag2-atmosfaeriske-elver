@@ -29,6 +29,38 @@ jupyter lab
 
 Gå til mappen du pakket ut, og åpne `atmosfaerisk_elv_jakob.ipynb`. Mappen `data` må ligge ved siden av notatboken.
 
+## Hva kan du endre?
+
+I cellene merket 🔧 kan du endre verdier og kjøre cellen på nytt. Dataene dekker bare en bestemt periode og et bestemt område. Velger du et tidspunkt eller et sted utenfor, bruker notatboken det nærmeste som finnes i dataene. Da kan figuren se riktig ut selv om den viser noe annet enn du tror, så sjekk alltid tid og sted i figurtittelen.
+
+| Del | Variabel | Dette kan du velge |
+|---|---|---|
+| 1a | `TIDER` | Tre tidspunkter fra 29.10 kl. 00 til 01.11 kl. 21 UTC, hver 3. time (kl. 00, 03, 06 og så videre) |
+| 1b | `TID_B` | Et tidspunkt i samme periode |
+| 1c | `LON_SNITT` | En lengdegrad fra 50° V til 25° Ø. Skriv vestlige lengdegrader som negative tall, for eksempel −20 |
+| 1c | `TID_C` | Et tidspunkt i samme periode |
+| 2a | `FRA`, `TIL` | En periode fra 29.10 kl. 00 til 01.11 kl. 23 UTC |
+| 2b | `LAT_PROFIL` | En breddegrad fra 57° N til 64° N |
+| 2c | `IVT_KYST`, `ANDEL`, `L_KM`, `TIMER` | Tallene i regnestykket. Her kan du velge fritt |
+| 2e | `STED` | Bergen, Voss, Odda, Kinsarvik eller Førde |
+| 3a | `T0` | En temperatur (°C) |
+| 3b | `TERSKEL` | Grensen (mm per døgn) for kraftig nedbør |
+| B | `TERSKEL_IVT` | Grensen (kg/(m·s)) for hva som regnes som elven |
+
+**Hva dataene dekker**
+
+| Data | Periode | Område | Oppløsning |
+|---|---|---|---|
+| IVT, vanndamp, trykk og nullgradersgrense (ERA5) | 29.10 kl. 00 til 01.11 kl. 21 UTC | 35–72° N, 50° V–25° Ø | Hver 3. time, 0,5° |
+| Nedbør og terrenghøyde (ERA5) | 29.10 kl. 00 til 01.11 kl. 23 UTC | 57–64° N, 3–13° Ø | Hver time, 0,25° |
+| Gullfjellet og Haukedal (MET) | 29.10 kl. 00 til 01.11 kl. 23 UTC | Stasjoner | Hver time |
+| Bergen – Florida (MET) | 01.01.1983–30.09.2026 | Stasjon | Ett tall per døgn |
+| Bergen (ERA5) | 01.01.1940–30.09.2026 | Én rute | Ett tall per døgn |
+
+Snittet i 1c bruker bare breddegradene fra 50° N til 70° N. Øvstedal er nevnt i MET-rapporten, men timesdata for stasjonen kom ikke med i nedlastingen, så den er ikke med i 2d.
+
+Stasjonsserien fra Bergen – Florida starter i 1983. Gjennomsnittet for 1961–1990 i 3b bygger derfor bare på årene 1983–1990, og det glidende 30-årsmiddelet starter først i 1988. ERA5-serien for Bergen går tilbake til 1940, men notatboken bruker den bare hvis stasjonsfilen mangler.
+
 ## For lærere
 
 Se [laererveiledning.md](laererveiledning.md) for tidsplan, fakta fra MET, løsningsforslag og hvordan du henter dataene med `hent_data_jakob.py`.
